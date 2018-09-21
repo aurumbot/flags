@@ -1,7 +1,7 @@
 package flags
 
 import (
-	"github.com/aurumbot/dat/data"
+	"github.com/aurumbot/lib/dat"
 	"strings"
 )
 
