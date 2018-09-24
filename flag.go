@@ -30,7 +30,7 @@ func Parse(msg string) []*Flag {
 	args := strings.Split(msg, " ")
 	flags := []*Flag{}
 	var cur *Flag
-	flags = append(flags, Flag{
+	flags = append(flags, &Flag{
 		Name:  "unflagged",
 		Value: ""})
 	for _, arg := range args {
