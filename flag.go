@@ -31,7 +31,7 @@ func Parse(msg string) []*Flag {
 	flags := []*Flag{}
 	var cur *Flag
 	flags = append(flags, &Flag{
-		Name:  "unflagged",
+		Name:  "--unflagged",
 		Value: ""})
 	for _, arg := range args {
 		switch {
