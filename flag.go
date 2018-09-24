@@ -5,13 +5,6 @@ import (
 	"strings"
 )
 
-type Type string
-
-const (
-	Dash       Type = "-"
-	DoubleDash Type = "--"
-)
-
 // A Flag is used to store a single flags data.
 //
 // Fields:
@@ -22,7 +15,6 @@ const (
 //      Ex: --name gabe miller --> Value = "gabe miller"
 //
 type Flag struct {
-	Type  Type
 	Name  string
 	Value string
 }
@@ -30,46 +22,36 @@ type Flag struct {
 // Parse parses a message for flags.
 //
 // Parameters:
-// - args ([]string) | A message split into []string
+// - args (string) | A string message
 //
 // Returns:
 // - ([]*Flag) | A slice of each flag type
 //
-func Parse(args []string) []*Flag {
+func Parse(msg string) []*Flag {
+	args := strings.Split(msg, " ")
 	flags := []*Flag{}
 	var cur *Flag
+	flags = append(flags, *Flag{
+		Name:  "unflagged",
+		Value: ""})
 	for _, arg := range args {
 		switch {
-		case len(arg) > 1 && arg[:2] == "--":
-			cur = &Flag{
-				Type: DoubleDash,
-				Name: arg[2:],
-			}
-			flags = append(flags, cur)
 		case arg[0] == '-':
 			cur = &Flag{
-				Type: Dash,
-				Name: arg[1:],
+				Name: arg,
 			}
 			flags = append(flags, cur)
-		case arg[0] != '-':
+		default:
 			if len(flags) > 0 {
 				flags[len(flags)-1].Value += arg + " "
 			} else {
-				cur = &Flag{
-					Type:  DoubleDash,
-					Name:  "unflagged",
-					Value: strings.Join(args, " "),
-				}
+				flags[0].Value += arg
 			}
-		default:
-			dat.Log.Println("System recived flag that was not valid: \"" + arg + "\" .")
 		}
 	}
 	// removes whitespace from flag values
 	for f := range flags {
 		flags[f].Value = strings.Trim(flags[f].Value, " ")
 	}
-
 	return flags
 }
